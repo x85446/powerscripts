@@ -120,7 +120,7 @@ const buildPdfList=(obj) => {
 	var rtnstring="";
 	var rtnkeys="";
 	Object.entries(obj).forEach(([key, val]) => {
-
+		logger.log("debug","key:"+key+" val:"+val);
 		rtnstring+=key+"=\""+val+"\" ";
 		rtnkeys+=key+" ";
 	});
