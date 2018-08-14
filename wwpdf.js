@@ -28,18 +28,33 @@ program
 
 const myConsoleFormat = winston.format.printf(function (info) {
 	if(program.timestamp){
-	  return `${info.level} [${moment().format('YYYY-MM-DDTHH:mm:ss.SSSZZ')}]: ${info.message}  `;
+		return `${info.level} [${moment().format('YYYY-MM-DDTHH:mm:ss.SSSZZ')}]: ${info.message}  `;
 	}
 	else return `${info.level}: ${info.message}`;
 });
 var logger = winston.createLogger({
-    transports: [
-      new winston.transports.Console({ format: winston.format.combine( winston.format.colorize(), myConsoleFormat)  })
-    ],
-    level: program.loglevel,
-  });
+	transports: [
+	new winston.transports.Console({ format: winston.format.combine( winston.format.colorize(), myConsoleFormat)  })
+	],
+	level: program.loglevel,
+});
 
+program.on('--help', function(){
+	console.log('\n  Examples:');
+	console.log('');
+	console.log('    $ pdfpower config.json');
+	console.log('');
+});
 
+const sysCheck=()=>{
+	let pv=process.version;
+	logger.log("debug",pv);
+	// var exe="pdftk "+PDF+" data_dump output "+outfile+";cat "+outfile
+	// _debug(exe);
+	metadata=execSync("which node");
+	logger.log("debug","we gt: "+metadata);
+	nvminstall="curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash"
+}
 
 const writeAbookmarkToFD = (fd,title,level,page,offset)=>{
 	fs.writeSync(fd,"BookmarkBegin\n");
@@ -262,30 +277,30 @@ const _debugDir=(message) => {
 // 	})();
 
 const processSchema = (schema) => {
-		var counter=0;
-		schema.pdfs.forEach(function(element) {
-			counter++;
-			logger.log
-			logger.info("building: "+element.outPDF);
-			mkdirp.sync(path.dirname(path.resolve(element.outPDF)));
-			var outtemp="/tmp/out_"+counter+".pdf";
-			var booktemp="/tmp/bmk"+counter+".txt";
-			if (element.inpdfs){
-				var inpdfOBJ=buildPdfList(element.inpdfs);
-				pdflist=inpdfOBJ.pdflist;
-				po=inpdfOBJ.po;
-				_debug("MY PO: "+po);
-			}
-			else if(element.wildcard){
-				var pdflist=element.wildcard;
-				po="";
-			}
-			if (element.pageOrder){
-				po=element.pageOrder;
-			}
-			var exe="pdftk "+pdflist+" cat "+po+" output "+outtemp
-			_debug(exe);
-			execSync(exe);
+	var counter=0;
+	schema.pdfs.forEach(function(element) {
+		counter++;
+		logger.log
+		logger.info("building: "+element.outPDF);
+		mkdirp.sync(path.dirname(path.resolve(element.outPDF)));
+		var outtemp="/tmp/out_"+counter+".pdf";
+		var booktemp="/tmp/bmk"+counter+".txt";
+		if (element.inpdfs){
+			var inpdfOBJ=buildPdfList(element.inpdfs);
+			pdflist=inpdfOBJ.pdflist;
+			po=inpdfOBJ.po;
+			_debug("MY PO: "+po);
+		}
+		else if(element.wildcard){
+			var pdflist=element.wildcard;
+			po="";
+		}
+		if (element.pageOrder){
+			po=element.pageOrder;
+		}
+		var exe="pdftk "+pdflist+" cat "+po+" output "+outtemp
+		_debug(exe);
+		execSync(exe);
 
 		//	}
 			// else { 
@@ -321,38 +336,45 @@ const processSchema = (schema) => {
 
 const start=()=>{
 	if (program.schema){
-	processSchema(desc[program.schema]);
+		processSchema(desc[program.schema]);
+	}
+	else {
+		for (var schema in desc){
+			processSchema(desc[schema]);
 		}
-		else {
-			for (var schema in desc){
-				processSchema(desc[schema]);
-			}
-		}
+	}
 	_debug("all done with start");
 }
 
 
 
+sysCheck();
+process.exit(1);
 
-desc = JSON.parse(jsonminify(fs.readFileSync(program.args[0], 'utf8')));
-froot=path.dirname(path.resolve(program.args[0]));
-process.chdir(froot);
+if(program.args.length>0){
+	desc = JSON.parse(jsonminify(fs.readFileSync(program.args[0], 'utf8')));
+	froot=path.dirname(path.resolve(program.args[0]));
+	process.chdir(froot);
 //_debug(froot);
 //process.exit(0);
  //_debug(desc);
-logger.log({
-  level: 'info',
-  message: 'Starting pdfpower parsing: '+program.args[0]
-});
+ logger.log({
+ 	level: 'info',
+ 	message: 'Starting pdfpower parsing: '+program.args[0]
+ });
 
-logger.log({
-  level: 'debug',
-  message: 'Hello debug distributed log files!'
-});
+ logger.log({
+ 	level: 'debug',
+ 	message: 'Hello debug distributed log files!'
+ });
 
 
 
  start();
+}
+else {
+	program.help();
+}
 
 
 

@@ -1,25 +1,25 @@
 {
-  "name": "wwpdf",
-  "version": "1.0.0",
-  "description": "pdf tools to make WigWag PDFs",
-  "main": "wwpdf.js",
-  "bin": {
-    "pdfpower": "./wwpdf.js"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "trav",
-  "license": "ISC",
-  "dependencies": {
-    "async": "^2.6.0",
-    "commander": "^2.15.1",
-    "ghostscript4js": "^2.0.7",
-    "jsonminify": "^0.4.1",
-    "mkdirp": "^0.5.1",
-    "moment": "^2.22.0",
-    "node-pdftk": "^1.2.2",
-    "sync-each": "^1.0.1",
-    "winston": "^3.0.0-rc4"
-  }
+	"name": "wwpdf",
+	"version": "1.0.0",
+	"description": "pdf tools to make WigWag PDFs",
+	"main": "wwpdf.js",
+	"bin": {
+		"pdfpower": "./wwpdf.js"
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "trav",
+	"license": "ISC",
+	"dependencies": {
+		"async": "^2.6.0",
+		"commander": "^2.15.1",
+		"ghostscript4js": "^2.0.7",
+		"jsonminify": "^0.4.1",
+		"mkdirp": "^0.5.1",
+		"moment": "^2.22.0",
+		"node-pdftk": "^1.2.2",
+		"sync-each": "^1.0.1",
+		"winston": "^3.0.0-rc4"
+	}
 }
