@@ -349,7 +349,7 @@ const start=()=>{
 
 
 sysCheck();
-process.exit(1);
+
 
 if(program.args.length>0){
 	desc = JSON.parse(jsonminify(fs.readFileSync(program.args[0], 'utf8')));
